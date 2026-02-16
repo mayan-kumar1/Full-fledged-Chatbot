@@ -1,0 +1,16 @@
+embeddings:
+  model_name: "nomic-embed-text"
+  dimensions: 1536
+
+text_splitter:
+  chunk_size: 500  
+  chunk_overlap: 100  
+  separators: ["\n\n", "\n", " ", ""]
+
+llm:
+  model_name: "llama-3.3-70b-versatile"
+  temperature: 0.3
+  max_tokens: 2048
+
+chroma_settings:
+  persist_directory: "./Chroma_db"
