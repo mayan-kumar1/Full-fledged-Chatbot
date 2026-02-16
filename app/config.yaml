@@ -14,3 +14,8 @@ llm:
 
 chroma_settings:
   persist_directory: "./Chroma_db"
+
+access_token:
+  expiry_min: 30
+  secret_key: "your_secret_key_here"
+  algorithm: "HS256"

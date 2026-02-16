@@ -1,22 +1,17 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import File, UploadFile, APIRouter, Depends
 
 from app.services.pdf_service import process_pdf
 from app.schema.query_schema import QueryRequest, QueryResponse
 from app.services.query_service import ask_llm
-
+from app.core.security import get_current_user
 import tempfile
 
-is_pdf_uploaded = False
+is_pdf_uploaded: bool = False
 
-app = FastAPI()
-
-
-@app.get("/")
-def read_root():
-    return {"message": "App is runing"}
+router = APIRouter()
 
 
-@app.post("/upload-pdf")
+@router.post("/upload-pdf")
 async def upload_pdf(file: UploadFile = File(...)):
     if file.content_type != "application/pdf":
         return {"error": "Only PDF files are allowed"}
@@ -34,8 +29,10 @@ async def upload_pdf(file: UploadFile = File(...)):
     return {"filename": file.filename, "status": "processed"}
 
 
-@app.post("/query", response_model=QueryResponse)
-async def query(request_data: QueryRequest):
+@router.post("/query", response_model=QueryResponse)
+async def query(
+    request_data: QueryRequest, current_user: dict[str, str] = Depends(get_current_user)
+):
 
     if not is_pdf_uploaded:
         return {

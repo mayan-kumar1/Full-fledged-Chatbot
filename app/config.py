@@ -31,11 +31,18 @@ class ChromaSettings(BaseModel):
     persist_directory: str
 
 
+class AccessTokenSettings(BaseModel):
+    expiry_min: int
+    secret_key: str
+    algorithm: str
+
+
 class Config(BaseModel):
     embeddings: EmbeddingSettings
     text_splitter: SplitterSettings
     llm: LLMSettings
     chroma_settings: ChromaSettings
+    access_token: AccessTokenSettings
 
 
 CONFIG_PATH = Path(__file__).parent / "config.yaml"
@@ -61,6 +68,9 @@ vector_store = Chroma(
     embedding_function=embeddings,
     collection_name="mixed_data_rag",
 )
+
+SQLALCHEMY_DATABASE_URL = "sqlite:///./userdata.db"
+
 
 if __name__ == "__main__":
     print(f"Model: {settings.llm.model_name}")
