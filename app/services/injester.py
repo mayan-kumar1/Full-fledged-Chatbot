@@ -12,6 +12,7 @@ from langchain_chroma import Chroma
 from langchain_ollama import OllamaEmbeddings
 import os
 import shutil
+from uuid import UUID
 
 
 class Loader:
@@ -54,6 +55,27 @@ class Loader:
 
         if file_name:
             for doc in pdf_chunks:
+                doc.metadata["file_name"] = file_name
+
+        return pdf_chunks
+
+    def load_pdf_user_id(
+        self, pdf: str, user_id: str | None, file_name: str | None = None
+    ):
+        loader = PyPDFLoader(pdf)  # type: ignore
+
+        pdf_docs = loader.load()
+        pdf_docsFiltered = filter_complex_metadata(pdf_docs)
+
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=self.chunk_size, chunk_overlap=self.chunk_overlap
+        )
+        pdf_chunks = splitter.split_documents(pdf_docsFiltered)
+
+        for doc in pdf_chunks:
+            doc.metadata["user_id"] = user_id
+
+            if file_name:
                 doc.metadata["file_name"] = file_name
 
         return pdf_chunks

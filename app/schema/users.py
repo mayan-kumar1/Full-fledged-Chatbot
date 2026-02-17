@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
+from uuid import UUID
 
 
 # This defines what the API expects when someone registers
@@ -11,7 +12,7 @@ class UserCreate(BaseModel):
 
 # This defines what the API sends back to the frontend
 class UserOut(BaseModel):
-    id: int
+    id: UUID
     username: str
     email: EmailStr
     is_active: bool
