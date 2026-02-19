@@ -17,5 +17,5 @@ chroma_settings:
 
 access_token:
   expiry_min: 30
-  secret_key: "your_secret_key_here"
+  secret_key: "bnzKVQXx04SNWgHtcksmecGWyW4HopeoTo7mBeWt3xc"
   algorithm: "HS256"
